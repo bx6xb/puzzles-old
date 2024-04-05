@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom"
-import s from "./Header.module.css"
 import { Container } from "../../components/container/Container"
 import { FlexContainer } from "../../components/flexContainer/FlexContainer"
 import styled from "styled-components"
@@ -8,34 +7,42 @@ export const Header = () => {
   return (
     <StyledHeader>
       <Container>
-        <FlexContainer justifyContent="space-evenly" alignItems="center">
-          <img src="#" alt="logo" />
+        <FlexContainer $justifyContent="space-evenly" $alignItems="center">
+          <img src="#" alt="logo" style={{ width: "20px" }} />
           <nav>
             <Menu>
-              <NavLink
-                to="/home"
-                className={({ isActive }) => (isActive ? s.active : "")}
-              >
-                Home
-              </NavLink>
-              <NavLink
-                to="/puzzles"
-                className={({ isActive }) => (isActive ? s.active : "")}
-              >
-                Games
-              </NavLink>
-              <NavLink
-                to="/profile"
-                className={({ isActive }) => (isActive ? s.active : "")}
-              >
-                Profile
-              </NavLink>
-              <NavLink
-                to="/about"
-                className={({ isActive }) => (isActive ? s.active : "")}
-              >
-                About
-              </NavLink>
+              <li>
+                <NavLink
+                  to="/home"
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                >
+                  Home
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/games"
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                >
+                  Games
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/profile"
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                >
+                  Profile
+                </NavLink>
+              </li>
+              <li>
+                <NavLink
+                  to="/about"
+                  className={({ isActive }) => (isActive ? "active" : "")}
+                >
+                  About
+                </NavLink>
+              </li>
             </Menu>
           </nav>
         </FlexContainer>

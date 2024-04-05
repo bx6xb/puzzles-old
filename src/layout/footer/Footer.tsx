@@ -1,8 +1,12 @@
 import styled from "styled-components"
-import s from "./Footer.module.css"
+import { Container } from "../../components/container/Container"
 
 export const Footer = () => {
-  return <StyledFooter>Footer</StyledFooter>
+  return (
+    <StyledFooter>
+      <Container>Footer</Container>
+    </StyledFooter>
+  )
 }
 
 const StyledFooter = styled.footer`

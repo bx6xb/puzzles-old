@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { Container } from "../../components/container/Container"
+import { Container } from "../../components/Container/Container"
 
 export const Footer = () => {
   return (

@@ -4,12 +4,10 @@ import {
   schulteTableReducer,
   setBestRecordAC,
   setCurrentNumberAC,
-  setFreezeTimeAC,
   setHintsModeAC,
-  setFieldsAC,
-  restartGameAC,
+  startGameAC,
   setTimeAC,
-  setTimeIsRunningAC,
+  endGameAC,
 } from "./schulteTableReducer"
 
 test("grid size should be changed", () => {
@@ -33,21 +31,10 @@ test("best records should be changed", () => {
 
 test("current number should be changed", () => {
   const newValue = 5
-  const newState = schulteTableReducer(
-    initialState,
-    setCurrentNumberAC(newValue)
-  )
+  const newState = schulteTableReducer(initialState, setCurrentNumberAC(newValue))
 
   expect(newState).not.toBe(initialState)
   expect(newState.currentNumber).toBe(newValue)
-})
-
-test("freeze time should be changed", () => {
-  const newValue = 1
-  const newState = schulteTableReducer(initialState, setFreezeTimeAC(newValue))
-
-  expect(newState).not.toBe(initialState)
-  expect(newState.freezeTime).toBe(newValue)
 })
 
 test("hints mode value should be changed", () => {
@@ -58,23 +45,25 @@ test("hints mode value should be changed", () => {
   expect(newState.hintsMode).toBe(newValue)
 })
 
-test("fields array should be changed", () => {
-  const newState = schulteTableReducer(initialState, setFieldsAC())
-
-  expect(newState).not.toBe(initialState)
-  expect(newState.fields).not.toBe(initialState.fields)
-  expect(newState.fields.length).toEqual(9)
-})
-
-test("current number and fields array should be changed", () => {
+test("start game: time should be equal 0, fields should be added, timeIsRunning value should be true and current number should be equal 1", () => {
   const transitState = schulteTableReducer(initialState, setCurrentNumberAC(5))
-  const newState = schulteTableReducer(transitState, restartGameAC())
+  const newState = schulteTableReducer(transitState, startGameAC())
 
   expect(newState).not.toBe(initialState)
   expect(newState.fields).not.toBe(initialState.fields)
   expect(newState.fields.length).toEqual(9)
   expect(newState.currentNumber).toEqual(1)
   expect(newState.time).toEqual(0)
+  expect(newState.timeIsRunning).toBeTruthy()
+})
+
+test("end game: fields array should be empty and timeIsRunning value should be equal false", () => {
+  const newState = schulteTableReducer(initialState, endGameAC())
+
+  expect(newState).not.toBe(initialState)
+  expect(newState.fields).not.toBe(initialState.fields)
+  expect(newState.fields.length).toEqual(0)
+  expect(newState.timeIsRunning).toBeFalsy()
 })
 
 test("time should be changed", () => {
@@ -83,15 +72,4 @@ test("time should be changed", () => {
 
   expect(newState).not.toBe(initialState)
   expect(newState.time).toBe(newValue)
-})
-
-test("timeIsRunning value should be changed", () => {
-  const newValue = true
-  const newState = schulteTableReducer(
-    initialState,
-    setTimeIsRunningAC(newValue)
-  )
-
-  expect(newState).not.toBe(initialState)
-  expect(newState.timeIsRunning).toBe(newValue)
 })

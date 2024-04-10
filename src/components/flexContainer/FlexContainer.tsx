@@ -9,7 +9,6 @@ type FlexContainerPropsType = {
 }
 
 export const FlexContainer = styled.div<FlexContainerPropsType>`
-  width: 100%;
   height: 100%;
   display: flex;
   justify-content: ${(p) => p.$justifyContent || "start"};

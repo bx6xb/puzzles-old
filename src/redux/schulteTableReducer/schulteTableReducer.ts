@@ -12,7 +12,6 @@ type SchulteTableStateType = {
     [key: string]: number
   }
   currentNumber: number
-  freezeTime: number
   hintsMode: boolean
   fields: GridFieldType[]
   time: number
@@ -33,7 +32,6 @@ export const initialState: SchulteTableStateType = {
     "10x10": 0,
   },
   currentNumber: 1,
-  freezeTime: 3,
   hintsMode: false,
   fields: [],
   time: 0,
@@ -44,17 +42,20 @@ type SchulteTableReducerActionType =
   | SetGridSizeActionType
   | SetBestRecordActionType
   | SetCurrentNumberActionType
-  | SetFreezeTimeActionType
   | SetHintsModeActionType
-  | SetFieldsActionType
-  | RestartGameActionType
+  | StartGameActionType
   | SetTimeActionType
-  | SetTimeIsRunningActionType
+  | EndGameActionType
 
 export const schulteTableReducer = (
   state: SchulteTableStateType = initialState,
   action: SchulteTableReducerActionType
 ): SchulteTableStateType => {
+  const createFields = () =>
+    createRandomNumberArray(1, state.gridSize ** 2, state.gridSize ** 2).map((num) => ({
+      text: num,
+    }))
+
   switch (action.type) {
     case "SET_GRID_SIZE":
       return {
@@ -74,49 +75,29 @@ export const schulteTableReducer = (
         ...state,
         currentNumber: action.currentNumber,
       }
-    case "SET_FREEZE_TIME":
-      return {
-        ...state,
-        freezeTime: action.freezeTime,
-      }
     case "SET_HINTS_MODE":
       return {
         ...state,
         hintsMode: action.hintsMode,
       }
-    case "SET_FIELDS":
+    case "START_GAME":
       return {
         ...state,
-        fields: createRandomNumberArray(
-          1,
-          state.gridSize ** 2,
-          state.gridSize ** 2
-        ).map((num) => ({
-          text: num,
-        })),
-      }
-    case "RESTART_GAME":
-      return {
-        ...state,
-        fields: createRandomNumberArray(
-          1,
-          state.gridSize ** 2,
-          state.gridSize ** 2
-        ).map((num) => ({
-          text: num,
-        })),
+        fields: createFields(),
         currentNumber: 1,
         time: 0,
+        timeIsRunning: true,
+      }
+    case "END_GAME":
+      return {
+        ...state,
+        fields: [],
+        timeIsRunning: false,
       }
     case "SET_TIME":
       return {
         ...state,
         time: action.time,
-      }
-    case "SET_TIME_IS_RUNNING":
-      return {
-        ...state,
-        timeIsRunning: action.timeIsRunning,
       }
     default:
       return state
@@ -147,14 +128,6 @@ export const setCurrentNumberAC = (currentNumber: number) =>
     currentNumber,
   }) as const
 
-type SetFreezeTimeActionType = ReturnType<typeof setFreezeTimeAC>
-
-export const setFreezeTimeAC = (freezeTime: number) =>
-  ({
-    type: "SET_FREEZE_TIME",
-    freezeTime,
-  }) as const
-
 type SetHintsModeActionType = ReturnType<typeof setHintsModeAC>
 
 export const setHintsModeAC = (hintsMode: boolean) =>
@@ -163,18 +136,18 @@ export const setHintsModeAC = (hintsMode: boolean) =>
     hintsMode,
   }) as const
 
-type SetFieldsActionType = ReturnType<typeof setFieldsAC>
+type StartGameActionType = ReturnType<typeof startGameAC>
 
-export const setFieldsAC = () =>
+export const startGameAC = () =>
   ({
-    type: "SET_FIELDS",
+    type: "START_GAME",
   }) as const
 
-type RestartGameActionType = ReturnType<typeof restartGameAC>
+type EndGameActionType = ReturnType<typeof endGameAC>
 
-export const restartGameAC = () =>
+export const endGameAC = () =>
   ({
-    type: "RESTART_GAME",
+    type: "END_GAME",
   }) as const
 
 type SetTimeActionType = ReturnType<typeof setTimeAC>
@@ -183,12 +156,4 @@ export const setTimeAC = (time: number) =>
   ({
     type: "SET_TIME",
     time,
-  }) as const
-
-type SetTimeIsRunningActionType = ReturnType<typeof setTimeIsRunningAC>
-
-export const setTimeIsRunningAC = (timeIsRunning: boolean) =>
-  ({
-    type: "SET_TIME_IS_RUNNING",
-    timeIsRunning,
   }) as const

@@ -1,11 +1,11 @@
-import { NavLink, Route, Routes } from "react-router-dom"
-import { SchulteTableContainer } from "./schulteTable/SchulteTableContainer"
+import { NavLink, Outlet } from "react-router-dom"
+import styled from "styled-components"
 
 export const GamesPage = () => {
   return (
-    <div>
-      <nav>
-        <ul>
+    <>
+      <Navigation>
+        <Menu>
           <li>
             <NavLink
               to="/games/schulte-table"
@@ -14,10 +14,34 @@ export const GamesPage = () => {
               Schulte Table
             </NavLink>
           </li>
-        </ul>
-      </nav>
+          <li>
+            <NavLink to="/games/snake" className={({ isActive }) => (isActive ? "active" : "")}>
+              Snake
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/games/memory-game"
+              className={({ isActive }) => (isActive ? "active" : "")}
+            >
+              Memory Game
+            </NavLink>
+          </li>
+        </Menu>
+      </Navigation>
 
-      <SchulteTableContainer />
-    </div>
+      <Outlet />
+    </>
   )
 }
+
+const Menu = styled.ul`
+  display: flex;
+  gap: 30px;
+`
+
+const Navigation = styled.nav`
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+`

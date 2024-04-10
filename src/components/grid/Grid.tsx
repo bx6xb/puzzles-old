@@ -60,4 +60,8 @@ const Field = styled.div<FieldPropsType>`
   align-items: center;
   font-size: 40px;
   user-select: none;
+  transition: .2s;
+  &:hover {
+    background-color: #c4c4c4;
+  }
 `

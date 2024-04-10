@@ -1,8 +1,8 @@
 import styled from "styled-components"
-import { Grid } from "../../../../components/grid/Grid"
+import { Grid } from "../../../../components/Grid/Grid"
 import { GridFieldType } from "../../../../redux/schulteTableReducer/schulteTableReducer"
 import React from "react"
-import { FlexContainer } from "../../../../components/flexContainer/FlexContainer"
+import { FlexContainer } from "../../../../components/FlexContainer/FlexContainer"
 import { Theme } from "../../../../style/Theme"
 
 type SchulteTablePropsType = {
@@ -11,24 +11,18 @@ type SchulteTablePropsType = {
   bestRecord: number
   currentNumber: number
   fieldOnClick: (index: number) => void
-  blackScreenText?: string
+  blackScreenText?: React.ReactNode
   restartBtnHandler: () => void
 }
 
 export const SchulteTable = React.memo((props: SchulteTablePropsType) => {
   return (
     <>
-      <FlexContainer
-        $flexDirection="column"
-        $justifyContent="space-evenly"
-        $alignItems="center"
-      >
+      <FlexContainer $flexDirection="column" $justifyContent="space-evenly" $alignItems="center">
         <BestTime>
           Best time {props.gridSize + "x" + props.gridSize}: {props.bestRecord}
         </BestTime>
-        {props.fields.length > 0 && (
-          <CurrentNumber>Find {props.currentNumber}</CurrentNumber>
-        )}
+        {props.fields.length > 0 && <CurrentNumber>Find {props.currentNumber}</CurrentNumber>}
       </FlexContainer>
       <GameGridContainer>
         {props.blackScreenText ? (
@@ -82,7 +76,7 @@ const CurrentNumber = styled.span`
 `
 
 const RestartButton = styled.button`
-  background-color: ${Theme.colors.green};
+  background-color: ${Theme.colors.accent};
   width: 270px;
   height: 50px;
   font-size: 20px;

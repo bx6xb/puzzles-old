@@ -1,5 +1,8 @@
 export const Theme = {
   colors: {
-    green: "green",
+    main: "#fff",
+    second: "#000",
+    accent: "#008000",
+    link: "#666666",
   },
 }

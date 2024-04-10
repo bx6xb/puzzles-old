@@ -3,24 +3,30 @@ import { SchulteTable } from "./SchulteTable"
 import { AppStateType } from "../../../../redux/store"
 import { useDispatch } from "react-redux"
 import {
-  restartGameAC,
+  startGameAC,
   setCurrentNumberAC,
   setTimeAC,
-  setTimeIsRunningAC,
+  endGameAC,
 } from "../../../../redux/schulteTableReducer/schulteTableReducer"
-import { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useState } from "react"
+import { PlayButton } from "../../../../components/PlayButton/PlayButton"
 
 export const SchulteTableContainer = () => {
   const state = useSelector((state: AppStateType) => state.schulteTable)
   const dispatch = useDispatch()
 
+  const [blackScreenText, setBlackScreenText] = useState<React.ReactNode>(
+    <PlayButton
+      callback={() => {
+        dispatch(startGameAC())
+      }}
+    />
+  )
+
   useEffect(() => {
     let intervalId: any
     if (state.timeIsRunning) {
-      intervalId = setInterval(
-        () => dispatch(setTimeAC(+(state.time + 0.01).toFixed(2))),
-        10
-      )
+      intervalId = setInterval(() => dispatch(setTimeAC(+(state.time + 0.01).toFixed(2))), 10)
     }
 
     return () => clearInterval(intervalId)
@@ -32,32 +38,28 @@ export const SchulteTableContainer = () => {
         state.fields[index].text === state.gridSize ** 2 &&
         state.currentNumber === state.gridSize ** 2
       ) {
-        console.log(state.time + "s")
-        dispatch(restartGameAC())
+        dispatch(endGameAC())
+        setBlackScreenText(<span>{state.time + "s"}</span>)
       } else if (state.fields[index].text === state.currentNumber) {
         dispatch(setCurrentNumberAC(state.currentNumber + 1))
       }
     },
-    [dispatch, state.fields, state.currentNumber, state.gridSize]
+    [dispatch, state.fields, state.currentNumber, state.gridSize, state.time]
   )
 
   const restartBtnHandler = useCallback(() => {
-    dispatch(restartGameAC())
-    dispatch(setTimeIsRunningAC(true))
+    dispatch(startGameAC())
   }, [dispatch])
 
   return (
-    <>
-      {state.time}
-      <SchulteTable
-        gridSize={state.gridSize}
-        bestRecord={state.bestRecords[state.gridSize + "x" + state.gridSize]}
-        fields={state.fields}
-        currentNumber={state.currentNumber}
-        fieldOnClick={fieldOnClick}
-        blackScreenText={""}
-        restartBtnHandler={restartBtnHandler}
-      />
-    </>
+    <SchulteTable
+      gridSize={state.gridSize}
+      bestRecord={state.bestRecords[state.gridSize + "x" + state.gridSize]}
+      fields={state.fields}
+      currentNumber={state.currentNumber}
+      fieldOnClick={fieldOnClick}
+      blackScreenText={state.timeIsRunning ? "" : blackScreenText}
+      restartBtnHandler={restartBtnHandler}
+    />
   )
 }

@@ -4,6 +4,8 @@ import { GridFieldType } from "../../../../redux/schulteTableReducer/schulteTabl
 import React from "react"
 import { FlexContainer } from "../../../../components/FlexContainer/FlexContainer"
 import { Theme } from "../../../../style/Theme"
+import { PlayButton } from "../../../../components/PlayButton/PlayButton"
+import { GameContainer } from "../../../../components/GameContainer/GameContainer"
 
 type SchulteTablePropsType = {
   gridSize: number
@@ -11,23 +13,29 @@ type SchulteTablePropsType = {
   bestRecord: number
   currentNumber: number
   fieldOnClick: (index: number) => void
-  blackScreenText?: React.ReactNode
+  messageText?: React.ReactNode
   restartBtnHandler: () => void
+  shouldPlayButtonDisplayed: boolean
+  playBtnHandler: () => void
 }
 
 export const SchulteTable = React.memo((props: SchulteTablePropsType) => {
   return (
-    <>
+    <GameContainer>
       <FlexContainer $flexDirection="column" $justifyContent="space-evenly" $alignItems="center">
         <BestTime>
           Best time {props.gridSize + "x" + props.gridSize}: {props.bestRecord}
         </BestTime>
-        {props.fields.length > 0 && <CurrentNumber>Find {props.currentNumber}</CurrentNumber>}
+        {props.currentNumber ? <CurrentNumber>Find {props.currentNumber}</CurrentNumber> : null}
       </FlexContainer>
-      <GameGridContainer>
-        {props.blackScreenText ? (
+      <GridContainer>
+        {props.shouldPlayButtonDisplayed ? (
           <FlexContainer $justifyContent="center" $alignItems="center">
-            {props.blackScreenText}
+            <PlayButton callback={props.playBtnHandler} />
+          </FlexContainer>
+        ) : props.messageText ? (
+          <FlexContainer $justifyContent="center" $alignItems="center">
+            {props.messageText}
           </FlexContainer>
         ) : (
           <Grid
@@ -37,20 +45,21 @@ export const SchulteTable = React.memo((props: SchulteTablePropsType) => {
             fieldOnClick={props.fieldOnClick}
           />
         )}
-      </GameGridContainer>
+      </GridContainer>
+
       <RestartButton onClick={props.restartBtnHandler}>
         <FlexContainer $justifyContent="center" $alignItems="center">
           Restart
         </FlexContainer>
       </RestartButton>
-    </>
+    </GameContainer>
   )
 })
 
-const GameGridContainer = styled.div`
+const GridContainer = styled.div`
   width: 600px;
   height: 600px;
-  margin: 0 auto;
+  margin: 0 auto 15px;
   border: 1px solid black;
   ${FlexContainer} {
     background-color: rgba(0, 0, 0, 0.5);
@@ -58,7 +67,6 @@ const GameGridContainer = styled.div`
     color: white;
   }
 `
-
 const BestTime = styled.span`
   text-align: center;
   font-size: 30px;
@@ -66,7 +74,6 @@ const BestTime = styled.span`
   cursor: pointer;
   margin-bottom: 50px;
 `
-
 const CurrentNumber = styled.span`
   text-align: center;
   margin-bottom: 5px;
@@ -74,7 +81,6 @@ const CurrentNumber = styled.span`
   position: absolute;
   bottom: 5px;
 `
-
 const RestartButton = styled.button`
   background-color: ${Theme.colors.accent};
   width: 270px;

@@ -37,7 +37,7 @@ type StyledGridPropsType = {
 
 const StyledGrid = styled.div<StyledGridPropsType>`
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1/1;
   display: grid;
   grid-template-columns: repeat(${(p) => p.$gridWidth}, 1fr);
   grid-template-rows: repeat(${(p) => p.$gridHeight}, 1fr);
@@ -50,7 +50,6 @@ type FieldPropsType = {
 }
 
 const Field = styled.div<FieldPropsType>`
-  /* border: 1px solid black; */
   background-color: ${(p) => p.$backgroundColor || "transparent"};
   color: ${(p) => p.$color || "black"};
   width: 100%;
@@ -60,7 +59,7 @@ const Field = styled.div<FieldPropsType>`
   align-items: center;
   font-size: 40px;
   user-select: none;
-  transition: .2s;
+  transition: 0.2s;
   &:hover {
     background-color: #c4c4c4;
   }

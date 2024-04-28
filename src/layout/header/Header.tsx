@@ -49,9 +49,7 @@ const StyledHeader = styled.header`
   width: 100%;
   /* position: fixed; */
   z-index: 1;
-  ${Container} {
-    padding: 15px 30px;
-  }
+  box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.5);
 `
 
 const Menu = styled.ul`

@@ -3,25 +3,19 @@ import { SchulteTable } from "./SchulteTable"
 import { AppStateType } from "../../../../redux/store"
 import { useDispatch } from "react-redux"
 import {
-  startGameAC,
+  setBestRecordAC,
   setCurrentNumberAC,
+  setFieldsAC,
+  setFirstInitAC,
+  setMessageTextAC,
   setTimeAC,
-  endGameAC,
+  setTimeIsRunningAC,
 } from "../../../../redux/schulteTableReducer/schulteTableReducer"
-import React, { useCallback, useEffect, useState } from "react"
-import { PlayButton } from "../../../../components/PlayButton/PlayButton"
+import { useCallback, useEffect } from "react"
 
 export const SchulteTableContainer = () => {
   const state = useSelector((state: AppStateType) => state.schulteTable)
   const dispatch = useDispatch()
-
-  const [blackScreenText, setBlackScreenText] = useState<React.ReactNode>(
-    <PlayButton
-      callback={() => {
-        dispatch(startGameAC())
-      }}
-    />
-  )
 
   useEffect(() => {
     let intervalId: any
@@ -32,14 +26,29 @@ export const SchulteTableContainer = () => {
     return () => clearInterval(intervalId)
   }, [state.timeIsRunning, state.time])
 
+  const stateGame = useCallback(() => {
+    dispatch(setFieldsAC())
+    dispatch(setCurrentNumberAC(state.currentNumber + 1))
+    dispatch(setMessageTextAC(""))
+    dispatch(setTimeAC(0))
+    dispatch(setTimeIsRunningAC(true))
+  }, [dispatch])
+
   const fieldOnClick = useCallback(
     (index: number) => {
       if (
         state.fields[index].text === state.gridSize ** 2 &&
         state.currentNumber === state.gridSize ** 2
       ) {
-        dispatch(endGameAC())
-        setBlackScreenText(<span>{state.time + "s"}</span>)
+        dispatch(setTimeIsRunningAC(false))
+        dispatch(setMessageTextAC(state.time + "s"))
+        dispatch(setCurrentNumberAC(0))
+        if (
+          state.bestRecords[state.gridSize] === 0 ||
+          state.bestRecords[state.gridSize] > state.time
+        ) {
+          dispatch(setBestRecordAC())
+        }
       } else if (state.fields[index].text === state.currentNumber) {
         dispatch(setCurrentNumberAC(state.currentNumber + 1))
       }
@@ -48,18 +57,25 @@ export const SchulteTableContainer = () => {
   )
 
   const restartBtnHandler = useCallback(() => {
-    dispatch(startGameAC())
+    stateGame()
+  }, [dispatch])
+
+  const playBtnHandler = useCallback(() => {
+    dispatch(setFirstInitAC(false))
+    stateGame()
   }, [dispatch])
 
   return (
     <SchulteTable
       gridSize={state.gridSize}
-      bestRecord={state.bestRecords[state.gridSize + "x" + state.gridSize]}
+      bestRecord={state.bestRecords[state.gridSize]}
       fields={state.fields}
       currentNumber={state.currentNumber}
       fieldOnClick={fieldOnClick}
-      blackScreenText={state.timeIsRunning ? "" : blackScreenText}
+      messageText={state.messageText}
       restartBtnHandler={restartBtnHandler}
+      shouldPlayButtonDisplayed={state.firstInit}
+      playBtnHandler={playBtnHandler}
     />
   )
 }

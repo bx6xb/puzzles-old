@@ -1,46 +1,44 @@
-import { SchulteTableStateDomainType } from "../../api/api"
 import { createRandomNumberArray } from "../../utils/createRandomNumberArray/createRandomNumberArray"
 import { Theme } from "../../style/Theme"
-import { ThunkType } from "../store"
+import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
-export const initialState: SchulteTableStateType = {
-  gridSize: 3,
-  bestRecords: {
-    "2": 0,
-    "3": 0,
-    "4": 0,
-    "5": 0,
-    "6": 0,
-    "7": 0,
-    "8": 0,
-    "9": 0,
-    "10": 0,
-  },
-  hintsMode: true,
-  currentNumber: 0,
-  fields: [],
-  time: 0,
-  timeIsRunning: false,
-  messageText: "",
-  firstInit: true,
-}
-
-export const schulteTableReducer = (
-  state: SchulteTableStateType = initialState,
-  action: SchulteTableReducerActionType
-): SchulteTableStateType => {
-  switch (action.type) {
-    case "schulteTable/SET_STATE":
+const slice = createSlice({
+  name: "schulteTable",
+  initialState: {
+    gridSize: 3,
+    bestRecords: {
+      "2": 0,
+      "3": 0,
+      "4": 0,
+      "5": 0,
+      "6": 0,
+      "7": 0,
+      "8": 0,
+      "9": 0,
+      "10": 0,
+    },
+    hintsMode: true,
+    currentNumber: 0,
+    fields: [],
+    time: 0,
+    timeIsRunning: false,
+    messageText: "",
+    firstInit: true,
+  } as SchulteTableState,
+  reducers: {
+    setState(state, action: PayloadAction<{ state: SchulteTableState }>) {
       return {
         ...state,
-        ...action.state,
+        ...action.payload.state,
       }
-    case "schulteTable/SET_GRID_SIZE":
+    },
+    setGridSize(state, action: PayloadAction<{ gridSize: number }>) {
       return {
         ...state,
-        gridSize: action.gridSize,
+        gridSize: action.payload.gridSize,
       }
-    case "schulteTable/SET_BEST_RECORD":
+    },
+    setBestRecord(state) {
       return {
         ...state,
         bestRecords: {
@@ -48,16 +46,18 @@ export const schulteTableReducer = (
           [state.gridSize]: state.time,
         },
       }
-    case "schulteTable/SET_HINTS_MODE":
+    },
+    setHintsMode(state, action: PayloadAction<{ hintsMode: boolean }>) {
       return {
         ...state,
-        hintsMode: action.hintsMode,
+        hintsMode: action.payload.hintsMode,
       }
-    case "schulteTable/SET_CURRENT_NUMBER":
+    },
+    setCurrentNumber(state, action: PayloadAction<{ currentNumber: number }>) {
       if (state.hintsMode) {
         return {
           ...state,
-          currentNumber: action.currentNumber,
+          currentNumber: action.payload.currentNumber,
           fields: state.fields.map((field) =>
             field.text === state.currentNumber
               ? { ...field, backgroundColor: Theme.colors.accent, color: Theme.colors.main }
@@ -67,120 +67,71 @@ export const schulteTableReducer = (
       }
       return {
         ...state,
-        currentNumber: action.currentNumber,
+        currentNumber: action.payload.currentNumber,
       }
-    case "schulteTable/SET_FIELDS":
+    },
+    setFields(state) {
       return {
         ...state,
         fields: createRandomNumberArray(1, state.gridSize ** 2, state.gridSize ** 2).map((num) => ({
           text: num,
         })),
       }
-    case "schulteTable/SET_TIME":
+    },
+    setTime(state, action: PayloadAction<{ time: number }>) {
       return {
         ...state,
-        time: action.time,
+        time: action.payload.time,
       }
-    case "schulteTable/SET_TIME_IS_RUNNING":
+    },
+    setTimeIsRunning(state, action: PayloadAction<{ timeIsRunning: boolean }>) {
       return {
         ...state,
-        timeIsRunning: action.timeIsRunning,
+        timeIsRunning: action.payload.timeIsRunning,
       }
-    case "schulteTable/SET_MESSAGE_TEXT":
+    },
+    setMessageText(state, action: PayloadAction<{ messageText: string }>) {
       return {
         ...state,
-        messageText: action.messageText,
+        messageText: action.payload.messageText,
       }
-    case "schulteTable/SET_FIRST_INIT":
+    },
+    setFirstInit(state, action: PayloadAction<{ firstInit: boolean }>) {
       return {
         ...state,
-        firstInit: action.firstInit,
+        firstInit: action.payload.firstInit,
       }
-    default:
-      return state
-  }
-}
+    },
+  },
+})
 
-// actions
-export const setStateAC = (state: SchulteTableStateDomainType) =>
-  ({
-    type: "schulteTable/SET_STATE",
-    state,
-  }) as const
-export const setGridSizeAC = (gridSize: number) =>
-  ({
-    type: "schulteTable/SET_GRID_SIZE",
-    gridSize,
-  }) as const
-export const setBestRecordAC = () =>
-  ({
-    type: "schulteTable/SET_BEST_RECORD",
-  }) as const
-export const setHintsModeAC = (hintsMode: boolean) =>
-  ({
-    type: "schulteTable/SET_HINTS_MODE",
-    hintsMode,
-  }) as const
-export const setCurrentNumberAC = (currentNumber: number) =>
-  ({
-    type: "schulteTable/SET_CURRENT_NUMBER",
-    currentNumber,
-  }) as const
-export const setFieldsAC = () =>
-  ({
-    type: "schulteTable/SET_FIELDS",
-  }) as const
-export const setTimeAC = (time: number) =>
-  ({
-    type: "schulteTable/SET_TIME",
-    time,
-  }) as const
-export const setTimeIsRunningAC = (timeIsRunning: boolean) =>
-  ({
-    type: "schulteTable/SET_TIME_IS_RUNNING",
-    timeIsRunning,
-  }) as const
-export const setMessageTextAC = (messageText: string) =>
-  ({
-    type: "schulteTable/SET_MESSAGE_TEXT",
-    messageText,
-  }) as const
-export const setFirstInitAC = (firstInit: boolean) =>
-  ({
-    type: "schulteTable/SET_FIRST_INIT",
-    firstInit,
-  }) as const
-
-// thunks
-export const setStateTC = (): ThunkType => (dispatch) => {}
+export const schulteTableReducer = slice.reducer
+export const {
+  setBestRecord,
+  setCurrentNumber,
+  setFields,
+  setFirstInit,
+  setMessageText,
+  setTime,
+  setTimeIsRunning,
+} = slice.actions
 
 // types
-type SchulteTableStateType = {
+type SchulteTableState = {
   gridSize: number
   bestRecords: {
     [key: string]: number
   }
   hintsMode: boolean
   currentNumber: number
-  fields: GridFieldType[]
+  fields: GridField[]
   time: number
   timeIsRunning: boolean
   messageText: string
   firstInit: boolean
 }
-export type GridFieldType = {
+export type GridField = {
   text: string | number
   backgroundColor?: string
   color?: string
 }
-export type SchulteTableReducerActionType =
-  | ReturnType<typeof setStateAC>
-  | ReturnType<typeof setGridSizeAC>
-  | ReturnType<typeof setBestRecordAC>
-  | ReturnType<typeof setHintsModeAC>
-  | ReturnType<typeof setCurrentNumberAC>
-  | ReturnType<typeof setFieldsAC>
-  | ReturnType<typeof setTimeAC>
-  | ReturnType<typeof setTimeIsRunningAC>
-  | ReturnType<typeof setMessageTextAC>
-  | ReturnType<typeof setFirstInitAC>

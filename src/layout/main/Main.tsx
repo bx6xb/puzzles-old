@@ -1,14 +1,14 @@
 import { Navigate, Route, Routes } from "react-router-dom"
 import { Container } from "../../components/Container/Container"
-import { HomePage } from "./homePage/HomePage"
-import { GamesPage } from "./gamesPage/GamesPage"
-import { ProfilePage } from "./profilePage/ProfilePage"
-import { AboutPage } from "./aboutPage/AboutPage"
-import { Error404Page } from "./error404Page/Error404Page"
-import { SchulteTableContainer } from "./games/schulteTable/SchulteTableContainer"
-import { SnakeContainer } from "./games/snake/SnakeContainer"
-import { MemoryGameContainer } from "./games/memoryGame/MemoryGameContainer"
+import { HomePage } from "./HomePage/HomePage"
+import { GamesPage } from "./GamesPage/GamesPage"
+import { ProfilePage } from "./ProfilePage/ProfilePage"
+import { AboutPage } from "./AboutPage/AboutPage"
+import { Error404Page } from "./Error404Page/Error404Page"
+import { MemoryGameContainer } from "./games/MemoryGame/MemoryGameContainer"
 import styled from "styled-components"
+import { SchulteTable } from "./games/SchulteTable/SchulteTable"
+import { Snake } from "./games/Snake/Snake"
 
 export const Main = () => {
   return (
@@ -18,8 +18,8 @@ export const Main = () => {
           <Route path="/" element={<Navigate to="/home" />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/games" element={<GamesPage />}>
-            <Route path="/games/schulte-table" element={<SchulteTableContainer />} />
-            <Route path="/games/snake" element={<SnakeContainer />} />
+            <Route path="/games/schulte-table" element={<SchulteTable />} />
+            <Route path="/games/snake" element={<Snake />} />
             <Route path="/games/memory-game" element={<MemoryGameContainer />} />
           </Route>
           <Route path="/profile" element={<ProfilePage />} />

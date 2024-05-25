@@ -1,18 +1,18 @@
 // import {
-//   setGridSizeAC,
+//   setGridSize,
 //   initialState,
 //   schulteTableReducer,
-//   setBestRecordAC,
-//   setCurrentNumberAC,
-//   setHintsModeAC,
+//   setBestRecord,
+//   setCurrentNumber,
+//   setHintsMode,
 //   startGameAC,
-//   setTimeAC,
+//   setTime,
 //   endGameAC,
 // } from "./schulteTableReducer"
 
 // test("grid size should be changed", () => {
 //   const newValue = 7
-//   const newState = schulteTableReducer(initialState, setGridSizeAC(newValue))
+//   const newState = schulteTableReducer(initialState, setGridSize(newValue))
 
 //   expect(newState).not.toBe(initialState)
 //   expect(newState.gridSize).toBe(newValue)
@@ -22,7 +22,7 @@
 
 // test("best records should be changed", () => {
 //   const newValue = 3.25
-//   const newState = schulteTableReducer(initialState, setBestRecordAC(newValue))
+//   const newState = schulteTableReducer(initialState, setBestRecord(newValue))
 
 //   expect(newState).not.toBe(initialState)
 //   expect(newState.bestRecords).not.toBe(initialState.bestRecords)
@@ -31,7 +31,7 @@
 
 // test("current number should be changed", () => {
 //   const newValue = 5
-//   const newState = schulteTableReducer(initialState, setCurrentNumberAC(newValue))
+//   const newState = schulteTableReducer(initialState, setCurrentNumber(newValue))
 
 //   expect(newState).not.toBe(initialState)
 //   expect(newState.currentNumber).toBe(newValue)
@@ -39,14 +39,14 @@
 
 // test("hints mode value should be changed", () => {
 //   const newValue = true
-//   const newState = schulteTableReducer(initialState, setHintsModeAC(newValue))
+//   const newState = schulteTableReducer(initialState, setHintsMode(newValue))
 
 //   expect(newState).not.toBe(initialState)
 //   expect(newState.hintsMode).toBe(newValue)
 // })
 
 // test("start game: time should be equal 0, fields should be added, timeIsRunning value should be true and current number should be equal 1", () => {
-//   const transitState = schulteTableReducer(initialState, setCurrentNumberAC(5))
+//   const transitState = schulteTableReducer(initialState, setCurrentNumber(5))
 //   const newState = schulteTableReducer(transitState, startGameAC())
 
 //   expect(newState).not.toBe(initialState)
@@ -68,7 +68,7 @@
 
 // test("time should be changed", () => {
 //   const newValue = 2
-//   const newState = schulteTableReducer(initialState, setTimeAC(newValue))
+//   const newState = schulteTableReducer(initialState, setTime(newValue))
 
 //   expect(newState).not.toBe(initialState)
 //   expect(newState.time).toBe(newValue)

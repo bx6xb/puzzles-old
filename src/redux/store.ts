@@ -1,21 +1,27 @@
-import { combineReducers, legacy_createStore } from "redux"
-import {
-  SchulteTableReducerActionType,
-  schulteTableReducer,
-} from "./schulteTableReducer/schulteTableReducer"
-import { ThunkAction } from "redux-thunk"
+import { Dispatch, combineReducers } from "redux"
+import { schulteTableReducer } from "./schulteTableReducer/schulteTableReducer"
+import { TypedUseSelectorHook } from "react-redux"
+import { useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
+import { configureStore } from "@reduxjs/toolkit"
+import { loadState, saveState } from "../api/api"
 
 const rootReducer = combineReducers({
   schulteTable: schulteTableReducer,
 })
 
-export const store = legacy_createStore(rootReducer)
+export const store = configureStore({
+  reducer: rootReducer,
+  preloadedState: loadState(),
+})
 
-export type AppStateType = ReturnType<typeof store.getState>
+export const useAppSelector: TypedUseSelectorHook<AppRootState> = useSelector
+export const useAppDispatch = (): Dispatch => useDispatch()
 
-export type AppActionType = SchulteTableReducerActionType
+store.subscribe(() => saveState(store.getState()))
 
-export type ThunkType = ThunkAction<void, AppStateType, unknown, AppActionType>
+// types
+export type AppRootState = ReturnType<typeof store.getState>
 
 // @ts-ignore
 window.store = store

@@ -1,10 +1,10 @@
 import styled from "styled-components"
-import { GridFieldType } from "../../redux/schulteTableReducer/schulteTableReducer"
+import { GridField } from "../../redux/schulteTableReducer/schulteTableReducer"
 
 type GridPropsType = {
   gridWidth: number
   gridHeight: number
-  fields: GridFieldType[]
+  fields: GridField[]
   fieldOnClick: (index: number) => void
 }
 

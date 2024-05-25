@@ -1,60 +1,59 @@
 import styled from "styled-components"
 import { Grid } from "../../../../components/Grid/Grid"
-import { GridFieldType } from "../../../../redux/schulteTableReducer/schulteTableReducer"
-import React from "react"
 import { FlexContainer } from "../../../../components/FlexContainer/FlexContainer"
 import { Theme } from "../../../../style/Theme"
 import { PlayButton } from "../../../../components/PlayButton/PlayButton"
 import { GameContainer } from "../../../../components/GameContainer/GameContainer"
+import { useSchulteTable } from "./hooks/useSchulteTable"
 
-type SchulteTablePropsType = {
-  gridSize: number
-  fields: GridFieldType[]
-  bestRecord: number
-  currentNumber: number
-  fieldOnClick: (index: number) => void
-  messageText?: React.ReactNode
-  restartBtnHandler: () => void
-  shouldPlayButtonDisplayed: boolean
-  playBtnHandler: () => void
-}
+export const SchulteTable = () => {
+  const {
+    gridSize,
+    bestRecords,
+    currentNumber,
+    firstInit,
+    messageText,
+    fields,
+    fieldOnClick,
+    restartBtnHandler,
+    playBtnHandler,
+  } = useSchulteTable()
 
-export const SchulteTable = React.memo((props: SchulteTablePropsType) => {
   return (
     <GameContainer>
       <FlexContainer $flexDirection="column" $justifyContent="space-evenly" $alignItems="center">
         <BestTime>
-          Best time {props.gridSize + "x" + props.gridSize}: {props.bestRecord}
+          Best time {gridSize + "x" + gridSize}: {bestRecords[gridSize]}
         </BestTime>
-        {props.currentNumber ? <CurrentNumber>Find {props.currentNumber}</CurrentNumber> : null}
+        {currentNumber ? <CurrentNumber>Find {currentNumber}</CurrentNumber> : null}
       </FlexContainer>
       <GridContainer>
-        {props.shouldPlayButtonDisplayed ? (
+        {firstInit ? (
           <FlexContainer $justifyContent="center" $alignItems="center">
-            <PlayButton callback={props.playBtnHandler} />
+            <PlayButton callback={playBtnHandler} />
           </FlexContainer>
-        ) : props.messageText ? (
+        ) : messageText ? (
           <FlexContainer $justifyContent="center" $alignItems="center">
-            {props.messageText}
+            {messageText}
           </FlexContainer>
         ) : (
           <Grid
-            gridWidth={props.gridSize}
-            gridHeight={props.gridSize}
-            fields={props.fields}
-            fieldOnClick={props.fieldOnClick}
+            gridWidth={gridSize}
+            gridHeight={gridSize}
+            fields={fields}
+            fieldOnClick={fieldOnClick}
           />
         )}
       </GridContainer>
 
-      <RestartButton onClick={props.restartBtnHandler}>
+      <RestartButton onClick={restartBtnHandler}>
         <FlexContainer $justifyContent="center" $alignItems="center">
           Restart
         </FlexContainer>
       </RestartButton>
     </GameContainer>
   )
-})
+}
 
 const GridContainer = styled.div`
   width: 600px;

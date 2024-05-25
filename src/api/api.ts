@@ -1,14 +1,12 @@
-export type SchulteTableStateDomainType = {
-  gridSize: number
-  bestRecords: {
-    [key: string]: number
-  }
-  hintsMode: boolean
-}
+import { AppRootState } from "../redux/store"
 
-export const schulteTableAPI = {
-  load() {},
-  save(state: SchulteTableStateDomainType) {
-    localStorage.setItem("schulte-table-state", JSON.stringify(state))
-  },
+export const loadState = () => {
+  const serializedState = localStorage.getItem("puzzles-state")
+  if (serializedState) {
+    return JSON.parse(serializedState)
+  }
+  return undefined
+}
+export const saveState = (state: AppRootState) => {
+  localStorage.setItem("puzzles-state", JSON.stringify(state))
 }

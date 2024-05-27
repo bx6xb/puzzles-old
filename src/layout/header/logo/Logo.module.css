@@ -1,0 +1,12 @@
+@import url("../../../style/variables.css");
+
+.logoWrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logoName {
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--second);
+}

@@ -1,67 +1,46 @@
 import { NavLink } from "react-router-dom"
 import { Container } from "../../components/Container/Container"
-import { FlexContainer } from "../../components/FlexContainer/FlexContainer"
-import styled from "styled-components"
-import { Logo } from "./logo/Logo"
-import { Theme } from "../../style/Theme"
-import { ThemeSwitcher } from "./themeSwitcher/ThemeSwitcher"
+import { Logo } from "./Logo/Logo"
+import { ThemeSwitcher } from "./ThemeSwitcher/ThemeSwitcher"
+import s from "./Header.module.css"
 
 export const Header = () => {
+  const linkStyle = ({ isActive }: { isActive: boolean }) => (isActive ? s.active : "")
+
   return (
-    <StyledHeader>
+    <div className={s.header}>
       <Container>
-        <FlexContainer $justifyContent="space-between" $alignItems="center">
+        <div className={s.headerContentWrapper}>
           <Logo />
 
           <nav>
-            <Menu>
+            <ul className={s.menu}>
               <li>
-                <NavLink to="/home" className={({ isActive }) => (isActive ? "active" : "")}>
+                <NavLink to="/home" className={linkStyle}>
                   Home
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/games" className={({ isActive }) => (isActive ? "active" : "")}>
+                <NavLink to="/games" className={linkStyle}>
                   Games
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/profile" className={({ isActive }) => (isActive ? "active" : "")}>
+                <NavLink to="/profile" className={linkStyle}>
                   Profile
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/about" className={({ isActive }) => (isActive ? "active" : "")}>
+                <NavLink to="/about" className={linkStyle}>
                   About
                 </NavLink>
               </li>
-            </Menu>
+            </ul>
           </nav>
 
           <ThemeSwitcher />
-        </FlexContainer>
+        </div>
       </Container>
-    </StyledHeader>
+    </div>
   )
 }
-
-const StyledHeader = styled.header`
-  width: 100%;
-  /* position: fixed; */
-  z-index: 1;
-  box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.5);
-`
-
-const Menu = styled.ul`
-  display: flex;
-  gap: 80px;
-  a {
-    color: ${Theme.colors.link};
-    font-weight: 400;
-    font-size: 16px;
-    transition: 0.2s;
-  }
-  a.active {
-    font-weight: 700;
-  }
-`

@@ -1,11 +1,11 @@
 import { NavLink, Outlet } from "react-router-dom"
-import styled from "styled-components"
+import s from "./GamesPage.module.css"
 
 export const GamesPage = () => {
   return (
     <>
-      <Navigation>
-        <Menu>
+      <nav className={s.navigation}>
+        <ul className={s.menu}>
           <li>
             <NavLink
               to="/games/schulte-table"
@@ -27,21 +27,10 @@ export const GamesPage = () => {
               Memory Game
             </NavLink>
           </li>
-        </Menu>
-      </Navigation>
+        </ul>
+      </nav>
 
       <Outlet />
     </>
   )
 }
-
-const Menu = styled.ul`
-  display: flex;
-  gap: 30px;
-`
-
-const Navigation = styled.nav`
-  display: flex;
-  justify-content: center;
-  padding: 5px;
-`

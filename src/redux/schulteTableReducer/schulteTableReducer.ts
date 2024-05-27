@@ -19,7 +19,7 @@ const slice = createSlice({
     },
     hintsMode: true,
     currentNumber: 0,
-    fields: [],
+    cells: [],
     time: 0,
     timeIsRunning: false,
     messageText: "",
@@ -58,10 +58,10 @@ const slice = createSlice({
         return {
           ...state,
           currentNumber: action.payload.currentNumber,
-          fields: state.fields.map((field) =>
-            field.text === state.currentNumber
-              ? { ...field, backgroundColor: Theme.colors.accent, color: Theme.colors.main }
-              : field
+          cells: state.cells.map((cell) =>
+            cell.id === state.currentNumber
+              ? { ...cell, backgroundColor: Theme.colors.accent, color: Theme.colors.main }
+              : cell,
           ),
         }
       }
@@ -70,11 +70,12 @@ const slice = createSlice({
         currentNumber: action.payload.currentNumber,
       }
     },
-    setFields(state) {
+    setCells(state) {
       return {
         ...state,
-        fields: createRandomNumberArray(1, state.gridSize ** 2, state.gridSize ** 2).map((num) => ({
-          text: num,
+        cells: createRandomNumberArray(1, state.gridSize ** 2, state.gridSize ** 2).map((num) => ({
+          id: num,
+          content: num,
         })),
       }
     },
@@ -102,6 +103,27 @@ const slice = createSlice({
         firstInit: action.payload.firstInit,
       }
     },
+    startGame(state) {
+      return {
+        ...state,
+        cells: createRandomNumberArray(1, state.gridSize ** 2, state.gridSize ** 2).map((num) => ({
+          id: num,
+          content: num,
+        })),
+        currentNumber: 1,
+        messageText: "",
+        time: 0,
+        timeIsRunning: true,
+      }
+    },
+    finishGame(state) {
+      return {
+        ...state,
+        timeIsRunning: false,
+        currentNumber: 0,
+        messageText: state.time + "s",
+      }
+    },
   },
 })
 
@@ -109,11 +131,13 @@ export const schulteTableReducer = slice.reducer
 export const {
   setBestRecord,
   setCurrentNumber,
-  setFields,
+  setCells,
   setFirstInit,
   setMessageText,
   setTime,
   setTimeIsRunning,
+  startGame,
+  finishGame,
 } = slice.actions
 
 // types
@@ -124,14 +148,15 @@ type SchulteTableState = {
   }
   hintsMode: boolean
   currentNumber: number
-  fields: GridField[]
+  cells: GridCell[]
   time: number
   timeIsRunning: boolean
   messageText: string
   firstInit: boolean
 }
-export type GridField = {
-  text: string | number
+export type GridCell = {
+  id: number
+  content: string | number
   backgroundColor?: string
   color?: string
 }

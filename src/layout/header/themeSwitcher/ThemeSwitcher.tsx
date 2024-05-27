@@ -1,16 +1,10 @@
-import styled from "styled-components"
 import { Icon } from "../../../components/Icon/Icon"
+import s from "./ThemeSwitcher.module.css"
 
 export const ThemeSwitcher = () => {
   return (
-    <StyledThemeSwitcher>
+    <div className={s.themeSwitcher}>
       <Icon iconId="themeSwitcher" width="25" height="25" />
-    </StyledThemeSwitcher>
+    </div>
   )
 }
-
-const StyledThemeSwitcher = styled.div`
-  svg {
-    cursor: pointer;
-  }
-`

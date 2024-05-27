@@ -1,19 +1,11 @@
-import styled from "styled-components"
-import { FlexContainer } from "../../../components/FlexContainer/FlexContainer"
 import { Icon } from "../../../components/Icon/Icon"
-import { Theme } from "../../../style/Theme"
+import s from "./Logo.module.css"
 
 export const Logo = () => {
   return (
-    <FlexContainer $gap="10px" $alignItems="center">
+    <div className={s.logoWrapper}>
       <Icon iconId="logo" width="40" height="31" />
-      <LogoName>Puzzles.com</LogoName>
-    </FlexContainer>
+      <span className={s.logoName}>Puzzles.com</span>
+    </div>
   )
 }
-
-const LogoName = styled.span`
-  font-weight: 700;
-  font-size: 22px;
-  color: ${Theme.colors.second};
-`

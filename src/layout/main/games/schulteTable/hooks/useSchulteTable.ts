@@ -1,13 +1,12 @@
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../../redux/store"
 import {
+  finishGame,
   setBestRecord,
   setCurrentNumber,
-  setFields,
   setFirstInit,
-  setMessageText,
   setTime,
-  setTimeIsRunning,
+  startGame,
 } from "../../../../../redux/schulteTableReducer/schulteTableReducer"
 
 export const useSchulteTable = () => {
@@ -16,7 +15,7 @@ export const useSchulteTable = () => {
     timeIsRunning,
     time,
     bestRecords,
-    fields,
+    cells,
     currentNumber,
     firstInit,
     messageText,
@@ -24,41 +23,35 @@ export const useSchulteTable = () => {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    let intervalId: any
+    let intervalId: number
     if (timeIsRunning) {
       const timeToDispatch = +(time + 0.01).toFixed(2)
-      intervalId = setInterval(() => dispatch(setTime({ time: timeToDispatch })), 10)
+      intervalId = +setInterval(() => dispatch(setTime({ time: timeToDispatch })), 10)
     }
 
     return () => clearInterval(intervalId)
-  }, [timeIsRunning, time])
+  }, [timeIsRunning, time, dispatch])
 
-  const startGame = () => {
-    dispatch(setFields())
-    dispatch(setCurrentNumber({ currentNumber: currentNumber + 1 }))
-    dispatch(setMessageText({ messageText: "" }))
-    dispatch(setTime({ time: 0 }))
-    dispatch(setTimeIsRunning({ timeIsRunning: true }))
-  }
-  const fieldOnClick = (index: number) => {
-    if (fields[index].text === gridSize ** 2 && currentNumber === gridSize ** 2) {
-      dispatch(setTimeIsRunning({ timeIsRunning: false }))
-      dispatch(setMessageText({ messageText: time + "s" }))
-      dispatch(setCurrentNumber({ currentNumber: 0 }))
-      if (bestRecords[gridSize] === 0 || bestRecords[gridSize] > time) {
-        dispatch(setBestRecord())
+  const cellOnClick = useCallback(
+    (id: number) => {
+      if (id === gridSize ** 2 && currentNumber === gridSize ** 2) {
+        dispatch(finishGame())
+        if (bestRecords[gridSize] === 0 || bestRecords[gridSize] > time) {
+          dispatch(setBestRecord())
+        }
+      } else if (id === currentNumber) {
+        dispatch(setCurrentNumber({ currentNumber: currentNumber + 1 }))
       }
-    } else if (fields[index].text === currentNumber) {
-      dispatch(setCurrentNumber({ currentNumber: currentNumber + 1 }))
-    }
-  }
-  const restartBtnHandler = () => {
-    startGame()
-  }
-  const playBtnHandler = () => {
+    },
+    [cells, gridSize, currentNumber, bestRecords, dispatch],
+  )
+  const restartBtnHandler = useCallback(() => {
+    dispatch(startGame())
+  }, [dispatch])
+  const playBtnHandler = useCallback(() => {
     dispatch(setFirstInit({ firstInit: false }))
-    startGame()
-  }
+    dispatch(startGame())
+  }, [dispatch])
 
   return {
     gridSize,
@@ -66,8 +59,8 @@ export const useSchulteTable = () => {
     currentNumber,
     firstInit,
     messageText,
-    fields,
-    fieldOnClick,
+    cells,
+    cellOnClick,
     restartBtnHandler,
     playBtnHandler,
   }

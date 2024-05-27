@@ -6,8 +6,8 @@ type PlayButtonPropsType = {
 
 export const PlayButton = (props: PlayButtonPropsType) => {
   return (
-    <div onClick={props.callback} className={s.playButton}>
+    <button onClick={props.callback} className={s.playButton}>
       Play
-    </div>
+    </button>
   )
 }

@@ -17,13 +17,13 @@ const slice = createSlice({
       "9": 0,
       "10": 0,
     },
-    hintsMode: true,
+    isHintsMode: false,
     currentNumber: 0,
     cells: [],
     time: 0,
     timeIsRunning: false,
     messageText: "",
-    firstInit: true,
+    isShuffleMode: false,
   } as SchulteTableState,
   reducers: {
     setState(state, action: PayloadAction<{ state: SchulteTableState }>) {
@@ -47,14 +47,14 @@ const slice = createSlice({
         },
       }
     },
-    setHintsMode(state, action: PayloadAction<{ hintsMode: boolean }>) {
+    setHintsMode(state, action: PayloadAction<{ isHintsMode: boolean }>) {
       return {
         ...state,
-        hintsMode: action.payload.hintsMode,
+        isHintsMode: action.payload.isHintsMode,
       }
     },
     setCurrentNumber(state, action: PayloadAction<{ currentNumber: number }>) {
-      if (state.hintsMode) {
+      if (state.isHintsMode) {
         return {
           ...state,
           currentNumber: action.payload.currentNumber,
@@ -97,12 +97,6 @@ const slice = createSlice({
         messageText: action.payload.messageText,
       }
     },
-    setFirstInit(state, action: PayloadAction<{ firstInit: boolean }>) {
-      return {
-        ...state,
-        firstInit: action.payload.firstInit,
-      }
-    },
     startGame(state) {
       return {
         ...state,
@@ -124,6 +118,13 @@ const slice = createSlice({
         messageText: state.time + "s",
       }
     },
+    setShuffleMode(state, action: PayloadAction<{ isShuffleMode: boolean }>) {
+      return {
+        ...state,
+        isShuffleMode: action.payload.isShuffleMode,
+        isHintsMode: false,
+      }
+    },
   },
 })
 
@@ -132,12 +133,15 @@ export const {
   setBestRecord,
   setCurrentNumber,
   setCells,
-  setFirstInit,
   setMessageText,
   setTime,
   setTimeIsRunning,
   startGame,
   finishGame,
+  setGridSize,
+  setHintsMode,
+  setState,
+  setShuffleMode,
 } = slice.actions
 
 // types
@@ -146,13 +150,13 @@ type SchulteTableState = {
   bestRecords: {
     [key: string]: number
   }
-  hintsMode: boolean
+  isHintsMode: boolean
   currentNumber: number
   cells: GridCell[]
   time: number
   timeIsRunning: boolean
   messageText: string
-  firstInit: boolean
+  isShuffleMode: boolean
 }
 export type GridCell = {
   id: number

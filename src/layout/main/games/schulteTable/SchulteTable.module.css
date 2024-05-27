@@ -24,7 +24,8 @@
 .gameGridContainer {
   width: 600px;
   height: 600px;
-  margin: 0 auto 15px;
+  /* margin: 0 auto 15px; */
+  flex-shrink: 0;
   border: 1px solid black;
 }
 .gameGridContainer .messageTextScreen {
@@ -47,7 +48,15 @@
   font-size: 20px;
   transition: 0.2s;
   color: white;
+  margin-top: 10px;
 }
 .restartButton:hover {
   transform: scale(1.1);
+}
+.gameAndSettingsWrapper {
+  display: flex;
+  gap: 20px;
+}
+.settings {
+  width: 100%;
 }

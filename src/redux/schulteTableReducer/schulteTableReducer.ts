@@ -2,29 +2,31 @@ import { createRandomNumberArray } from "../../utils/createRandomNumberArray/cre
 import { Theme } from "../../style/Theme"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
 
+export const initialState = {
+  gridSize: 3,
+  bestRecords: {
+    "2": 0,
+    "3": 0,
+    "4": 0,
+    "5": 0,
+    "6": 0,
+    "7": 0,
+    "8": 0,
+    "9": 0,
+    "10": 0,
+  },
+  isHintsMode: false,
+  currentNumber: 0,
+  cells: [],
+  time: 0,
+  timeIsRunning: false,
+  messageText: "",
+  isShuffleMode: false,
+} as SchulteTableState
+
 const slice = createSlice({
   name: "schulteTable",
-  initialState: {
-    gridSize: 3,
-    bestRecords: {
-      "2": 0,
-      "3": 0,
-      "4": 0,
-      "5": 0,
-      "6": 0,
-      "7": 0,
-      "8": 0,
-      "9": 0,
-      "10": 0,
-    },
-    isHintsMode: false,
-    currentNumber: 0,
-    cells: [],
-    time: 0,
-    timeIsRunning: false,
-    messageText: "",
-    isShuffleMode: false,
-  } as SchulteTableState,
+  initialState,
   reducers: {
     setState(state, action: PayloadAction<{ state: SchulteTableState }>) {
       return {
@@ -32,7 +34,7 @@ const slice = createSlice({
         ...action.payload.state,
       }
     },
-    setGridSize(state, action: PayloadAction<{ gridSize: number }>) {
+    setGridSize(state, action: PayloadAction<{ gridSize: GridSizeValues }>) {
       return {
         ...state,
         gridSize: action.payload.gridSize,
@@ -97,6 +99,13 @@ const slice = createSlice({
         messageText: action.payload.messageText,
       }
     },
+    setShuffleMode(state, action: PayloadAction<{ isShuffleMode: boolean }>) {
+      return {
+        ...state,
+        isShuffleMode: action.payload.isShuffleMode,
+        isHintsMode: false,
+      }
+    },
     startGame(state) {
       return {
         ...state,
@@ -115,14 +124,7 @@ const slice = createSlice({
         ...state,
         timeIsRunning: false,
         currentNumber: 0,
-        messageText: state.time + "s",
-      }
-    },
-    setShuffleMode(state, action: PayloadAction<{ isShuffleMode: boolean }>) {
-      return {
-        ...state,
-        isShuffleMode: action.payload.isShuffleMode,
-        isHintsMode: false,
+        messageText: "",
       }
     },
   },
@@ -145,7 +147,7 @@ export const {
 } = slice.actions
 
 // types
-type SchulteTableState = {
+export type SchulteTableState = {
   gridSize: number
   bestRecords: {
     [key: string]: number
@@ -164,3 +166,4 @@ export type GridCell = {
   backgroundColor?: string
   color?: string
 }
+export type GridSizeValues = 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10

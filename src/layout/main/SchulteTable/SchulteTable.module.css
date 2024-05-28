@@ -1,4 +1,4 @@
-@import url("../../../../style/variables.css");
+@import url("../../../style/variables.css");
 
 .gameInfoWrapper {
   display: flex;

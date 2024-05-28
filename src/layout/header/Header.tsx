@@ -16,11 +16,6 @@ export const Header = () => {
           <nav>
             <ul className={s.menu}>
               <li>
-                <NavLink to="/home" className={linkStyle}>
-                  Home
-                </NavLink>
-              </li>
-              <li>
                 <NavLink to="/games" className={linkStyle}>
                   Games
                 </NavLink>

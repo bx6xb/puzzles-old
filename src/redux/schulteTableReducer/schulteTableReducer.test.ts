@@ -1,77 +1,96 @@
-// import {
-//   setGridSize,
-//   initialState,
-//   schulteTableReducer,
-//   setBestRecord,
-//   setCurrentNumber,
-//   setHintsMode,
-//   startGameAC,
-//   setTime,
-//   endGameAC,
-// } from "./schulteTableReducer"
+import {
+  setGridSize,
+  initialState,
+  schulteTableReducer,
+  setBestRecord,
+  setCurrentNumber,
+  setHintsMode,
+  setTime,
+  setState,
+  SchulteTableState,
+  setCells,
+  setShuffleMode,
+  startGame,
+  finishGame,
+} from "./schulteTableReducer"
 
-// test("grid size should be changed", () => {
-//   const newValue = 7
-//   const newState = schulteTableReducer(initialState, setGridSize(newValue))
+test("state should be set", () => {
+  const newState = schulteTableReducer({} as SchulteTableState, setState({ state: initialState }))
 
-//   expect(newState).not.toBe(initialState)
-//   expect(newState.gridSize).toBe(newValue)
-//   expect(initialState.gridSize).toBeGreaterThanOrEqual(2)
-//   expect(initialState.gridSize).toBeLessThanOrEqual(10)
-// })
+  expect(Object.keys(newState).length).toBe(9)
+  expect(newState.gridSize).toBe(initialState.gridSize)
+  expect(newState.bestRecords).toBe(initialState.bestRecords)
+  expect(newState.isHintsMode).toBe(initialState.isHintsMode)
+  expect(newState.currentNumber).toBe(initialState.currentNumber)
+  expect(newState.cells).toBe(initialState.cells)
+  expect(newState.time).toBe(initialState.time)
+  expect(newState.timeIsRunning).toBe(initialState.timeIsRunning)
+  expect(newState.messageText).toBe(initialState.messageText)
+  expect(newState.isShuffleMode).toBe(initialState.isShuffleMode)
+})
+test("grid size should be changed", () => {
+  const gridSize = 7
+  const newState = schulteTableReducer(initialState, setGridSize({ gridSize }))
 
-// test("best records should be changed", () => {
-//   const newValue = 3.25
-//   const newState = schulteTableReducer(initialState, setBestRecord(newValue))
+  expect(newState.gridSize).toBe(gridSize)
+})
+test("best records should be changed", () => {
+  const time = 3.25
+  const newState = schulteTableReducer({ ...initialState, time }, setBestRecord())
 
-//   expect(newState).not.toBe(initialState)
-//   expect(newState.bestRecords).not.toBe(initialState.bestRecords)
-//   expect(newState.bestRecords["3x3"]).toBe(newValue)
-// })
+  expect(newState.bestRecords).not.toBe(initialState.bestRecords)
+  expect(newState.bestRecords["3"]).toBe(time)
+})
+test("hints mode value should be changed", () => {
+  const isHintsMode = true
+  const newState = schulteTableReducer(initialState, setHintsMode({ isHintsMode }))
 
-// test("current number should be changed", () => {
-//   const newValue = 5
-//   const newState = schulteTableReducer(initialState, setCurrentNumber(newValue))
+  expect(newState.isHintsMode).toBe(isHintsMode)
+})
+test("current number should be changed", () => {
+  const currentNumber = 5
+  const newState = schulteTableReducer(initialState, setCurrentNumber({ currentNumber }))
 
-//   expect(newState).not.toBe(initialState)
-//   expect(newState.currentNumber).toBe(newValue)
-// })
+  expect(newState.currentNumber).toBe(currentNumber)
+})
+test("cells should be set", () => {
+  let newState = schulteTableReducer(initialState, setCells())
+  expect(newState.cells.length).toBe(9)
 
-// test("hints mode value should be changed", () => {
-//   const newValue = true
-//   const newState = schulteTableReducer(initialState, setHintsMode(newValue))
+  newState = schulteTableReducer({ ...initialState, gridSize: 5 }, setCells())
+  expect(newState.cells.length).toBe(25)
+})
+test("time should be changed", () => {
+  const time = 2.15
+  const newState = schulteTableReducer(initialState, setTime({ time }))
 
-//   expect(newState).not.toBe(initialState)
-//   expect(newState.hintsMode).toBe(newValue)
-// })
+  expect(newState.time).toBe(time)
+})
+test("shuffle mode value should be changed", () => {
+  const isShuffleMode = true
+  const newState = schulteTableReducer(initialState, setShuffleMode({ isShuffleMode }))
 
-// test("start game: time should be equal 0, fields should be added, timeIsRunning value should be true and current number should be equal 1", () => {
-//   const transitState = schulteTableReducer(initialState, setCurrentNumber(5))
-//   const newState = schulteTableReducer(transitState, startGameAC())
+  expect(newState.isShuffleMode).toBe(isShuffleMode)
+})
+test("start game: cells should be set, current number is 1, empty message text, time is 0, time is running is true", () => {
+  const newState = schulteTableReducer(
+    { ...initialState, gridSize: 4, messageText: "1.23s", time: 1.23, timeIsRunning: false },
+    startGame(),
+  )
 
-//   expect(newState).not.toBe(initialState)
-//   expect(newState.fields).not.toBe(initialState.fields)
-//   expect(newState.fields.length).toEqual(9)
-//   expect(newState.currentNumber).toEqual(1)
-//   expect(newState.time).toEqual(0)
-//   expect(newState.timeIsRunning).toBeTruthy()
-// })
+  expect(newState.cells.length).toBe(16)
+  expect(newState.currentNumber).toBe(1)
+  expect(newState.messageText).toBe("")
+  expect(newState.time).toBe(0)
+  expect(newState.timeIsRunning).toBeTruthy()
+})
+test("finish game: time is running is false, current number is 0, empty message text", () => {
+  const newState = schulteTableReducer(
+    { ...initialState, timeIsRunning: true, currentNumber: 9, messageText: "3.24" },
+    finishGame(),
+  )
 
-// test("end game: fields array should be empty and timeIsRunning value should be equal false", () => {
-//   const newState = schulteTableReducer(initialState, endGameAC())
-
-//   expect(newState).not.toBe(initialState)
-//   expect(newState.fields).not.toBe(initialState.fields)
-//   expect(newState.fields.length).toEqual(0)
-//   expect(newState.timeIsRunning).toBeFalsy()
-// })
-
-// test("time should be changed", () => {
-//   const newValue = 2
-//   const newState = schulteTableReducer(initialState, setTime(newValue))
-
-//   expect(newState).not.toBe(initialState)
-//   expect(newState.time).toBe(newValue)
-// })
-
-export default ""
+  expect(newState.timeIsRunning).toBeFalsy()
+  expect(newState.currentNumber).toBe(0)
+  expect(newState.messageText).toBe("")
+})

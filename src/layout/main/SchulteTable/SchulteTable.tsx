@@ -1,8 +1,9 @@
-import { GameGrid } from "../../../../components/GameGrid/GameGrid"
-import { PlayButton } from "../../../../components/PlayButton/PlayButton"
+import { GameGrid } from "../../../components/GameGrid/GameGrid"
+import { PlayButton } from "../../../components/PlayButton/PlayButton"
 import { useSchulteTable } from "./hooks/useSchulteTable"
 import { memo } from "react"
 import s from "./SchulteTable.module.css"
+import { NavLink } from "react-router-dom"
 
 export const SchulteTable = memo(() => {
   const {
@@ -23,6 +24,9 @@ export const SchulteTable = memo(() => {
 
   return (
     <>
+      <NavLink to={"/games"}>
+        <button style={{ fontSize: "30px", padding: "7px" }}>{"<-"}</button>
+      </NavLink>
       <div className={s.gameAndSettingsWrapper}>
         <div>
           <div className={s.gameInfoWrapper}>

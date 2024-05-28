@@ -1,16 +1,19 @@
 import { ChangeEvent, useCallback, useEffect } from "react"
-import { useAppDispatch, useAppSelector } from "../../../../../redux/store"
+import { useAppDispatch, useAppSelector } from "../../../../redux/store"
 import {
+  GridSizeValues,
   finishGame,
   setBestRecord,
   setCells,
   setCurrentNumber,
   setGridSize,
   setHintsMode,
+  setMessageText,
   setShuffleMode,
   setTime,
   startGame,
-} from "../../../../../redux/schulteTableReducer/schulteTableReducer"
+} from "../../../../redux/schulteTableReducer/schulteTableReducer"
+import { timeFormatter } from "../../../../utils/timeFormatter/timeFormatter"
 
 export const useSchulteTable = () => {
   const {
@@ -29,7 +32,6 @@ export const useSchulteTable = () => {
   useEffect(() => {
     dispatch(finishGame())
   }, [])
-
   useEffect(() => {
     let intervalId: number
     if (timeIsRunning) {
@@ -44,6 +46,7 @@ export const useSchulteTable = () => {
     (id: number) => {
       if (id === gridSize ** 2 && currentNumber === gridSize ** 2) {
         dispatch(finishGame())
+        dispatch(setMessageText({ messageText: timeFormatter(time) }))
         if (bestRecords[gridSize] === 0 || bestRecords[gridSize] > time) {
           dispatch(setBestRecord())
         }
@@ -66,7 +69,7 @@ export const useSchulteTable = () => {
     dispatch(finishGame())
   }
   const gridSizeOnSize = (e: ChangeEvent<HTMLSelectElement>) => {
-    dispatch(setGridSize({ gridSize: +e.currentTarget.value }))
+    dispatch(setGridSize({ gridSize: +e.currentTarget.value as GridSizeValues }))
     dispatch(finishGame())
   }
   const shuffleModeOnChange = (e: ChangeEvent<HTMLInputElement>) => {

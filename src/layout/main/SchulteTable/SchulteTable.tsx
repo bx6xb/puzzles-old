@@ -1,9 +1,8 @@
 import { GameGrid } from "../../../components/GameGrid/GameGrid"
-import { PlayButton } from "../../../components/PlayButton/PlayButton"
 import { useSchulteTable } from "./hooks/useSchulteTable"
 import { memo } from "react"
 import s from "./SchulteTable.module.css"
-import { NavLink } from "react-router-dom"
+import { BackButton } from "../../../components/BackButton/BackButton"
 
 export const SchulteTable = memo(() => {
   const {
@@ -16,7 +15,7 @@ export const SchulteTable = memo(() => {
     isHintsMode,
     isShuffleMode,
     cellOnClick,
-    playBtnHandler,
+    playBtnOnClick,
     hintsModeOnChange,
     gridSizeOnSize,
     shuffleModeOnChange,
@@ -24,9 +23,7 @@ export const SchulteTable = memo(() => {
 
   return (
     <>
-      <NavLink to={"/games"}>
-        <button style={{ fontSize: "30px", padding: "7px" }}>{"<-"}</button>
-      </NavLink>
+      <BackButton />
       <div className={s.gameAndSettingsWrapper}>
         <div>
           <div className={s.gameInfoWrapper}>
@@ -36,25 +33,15 @@ export const SchulteTable = memo(() => {
             {currentNumber ? <span className={s.currentNumber}>Find {currentNumber}</span> : null}
           </div>
 
-          <div className={s.gameGridContainer}>
-            {!timeIsRunning || messageText ? (
-              <div className={s.messageTextScreen}>
-                {!timeIsRunning && (
-                  <div style={{ display: "flex", flexDirection: "column" }}>
-                    {messageText}
-                    <PlayButton callback={playBtnHandler} />
-                  </div>
-                )}
-              </div>
-            ) : (
-              <GameGrid
-                gridWidth={gridSize}
-                gridHeight={gridSize}
-                cells={cells}
-                cellOnClick={cellOnClick}
-              />
-            )}
-          </div>
+          <GameGrid
+            gridWidth={gridSize}
+            gridHeight={gridSize}
+            cells={cells}
+            showPlayButton={!timeIsRunning}
+            messageText={messageText}
+            cellOnClick={cellOnClick}
+            playBtnOnClick={playBtnOnClick}
+          />
         </div>
 
         <div className={s.settings}>

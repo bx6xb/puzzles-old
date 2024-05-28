@@ -1,6 +1,7 @@
 import { createRandomNumberArray } from "../../utils/createRandomNumberArray/createRandomNumberArray"
 import { Theme } from "../../style/Theme"
 import { PayloadAction, createSlice } from "@reduxjs/toolkit"
+import { GridCell } from "../../components/GameGrid/GameGrid"
 
 export const initialState = {
   gridSize: 3,
@@ -159,11 +160,5 @@ export type SchulteTableState = {
   timeIsRunning: boolean
   messageText: string
   isShuffleMode: boolean
-}
-export type GridCell = {
-  id: number
-  content: string | number
-  backgroundColor?: string
-  color?: string
 }
 export type GridSizeValues = 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10

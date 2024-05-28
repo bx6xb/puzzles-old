@@ -5,9 +5,11 @@ import { useSelector } from "react-redux"
 import { useDispatch } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { loadState, saveState } from "../api/api"
+import { snakeReducer } from "./snakeReducer/snakeReducer"
 
 const rootReducer = combineReducers({
   schulteTable: schulteTableReducer,
+  snake: snakeReducer,
 })
 
 export const store = configureStore({

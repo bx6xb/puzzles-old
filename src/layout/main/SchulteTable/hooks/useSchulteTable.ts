@@ -59,7 +59,7 @@ export const useSchulteTable = () => {
     },
     [time, cells, gridSize, currentNumber, bestRecords, dispatch],
   )
-  const playBtnHandler = useCallback(() => {
+  const playBtnOnClick = useCallback(() => {
     dispatch(startGame())
   }, [dispatch])
 
@@ -87,7 +87,7 @@ export const useSchulteTable = () => {
     isHintsMode,
     isShuffleMode,
     cellOnClick,
-    playBtnHandler,
+    playBtnOnClick,
     hintsModeOnChange,
     gridSizeOnSize,
     shuffleModeOnChange,
